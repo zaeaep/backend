@@ -41,7 +41,7 @@ public class TaskService {
     }
 
     public List<TaskResponse> findAll() {
-        return taskRepository.findAll().stream().map(this::toResponse).toList();
+        return taskRepository.findAll().stream().sorted((a, b) -> Long.compare(a.id(), b.id())).map(this::toResponse).toList();
     }
 
     public TaskResponse findById(long id) {
