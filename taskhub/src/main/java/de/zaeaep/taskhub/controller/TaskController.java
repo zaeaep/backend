@@ -6,6 +6,7 @@ import de.zaeaep.taskhub.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskResponse create(@RequestBody TaskCreateRequest request) {
+    public TaskResponse create(@Valid @RequestBody TaskCreateRequest request) {
         return taskService.create(request);
     }
     
