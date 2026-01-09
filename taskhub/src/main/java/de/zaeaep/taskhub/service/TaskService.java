@@ -6,6 +6,7 @@ import de.zaeaep.taskhub.exception.TaskNotFoundException;
 import de.zaeaep.taskhub.model.Task;
 import de.zaeaep.taskhub.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import de.zaeaep.taskhub.dto.TaskUpdateRequest;
 
 import java.time.Instant;
 //import java.util.LinkedHashMap;
@@ -38,6 +39,32 @@ public class TaskService {
         taskRepository.save(task);  // here we save the task in the HashMap, later DB
 
         return toResponse(task);
+    }
+
+    public TaskResponse update(long id, TaskUpdateRequest request) {
+        Task existing = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
+
+        String newTitle = request.title() != null ? request.title() : existing.title();
+        String newDescription = request.description() != null ? request.description() : existing.description();
+        boolean newDone = request.done() != null ? request.done() : existing.done();
+
+        Task updated = new Task(
+            existing.id(),
+            newTitle,
+            newDescription,
+            newDone,
+            existing.createdAt()
+        );
+
+        taskRepository.save(updated);
+        return toResponse(updated);
+    }
+
+    public void delete(long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new TaskNotFoundException(id);
+        }
+        taskRepository.deleteById(id);
     }
 
     public List<TaskResponse> findAll() {
