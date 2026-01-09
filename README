@@ -1,0 +1,13 @@
+## Start
+./mvnw spring-boot:run
+
+## Tests
+./mvnw clean test
+
+## API
+GET  /api/hello
+POST /api/tasks
+GET  /api/tasks
+GET  /api/tasks/{id}
+PUT  /api/tasks/{id}
+DELETE /api/tasks/{id}

@@ -38,7 +38,7 @@ public class TaskService {
 
         taskRepository.save(task);  // here we save the task in the HashMap, later DB
 
-        return toResponse(task);
+        return TaskMapper.toResponse(task);
     }
 
     public TaskResponse update(long id, TaskUpdateRequest request) {
@@ -57,7 +57,7 @@ public class TaskService {
         );
 
         taskRepository.save(updated);
-        return toResponse(updated);
+        return TaskMapper.toResponse(updated);
     }
 
     public void delete(long id) {
@@ -73,7 +73,7 @@ public class TaskService {
 
     public TaskResponse findById(long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
-        return toResponse(task);
+        return TaskMapper.toResponse(task);
     }
 
     private TaskResponse toResponse(Task task) {
