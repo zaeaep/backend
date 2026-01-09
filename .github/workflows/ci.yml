@@ -30,4 +30,5 @@ jobs:
           cache: maven
       
       - name: Run tests
+        working-directory: ./taskhub
         run: ./mvnw -B -ntp clean test
