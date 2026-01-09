@@ -2,12 +2,12 @@ name: CI
 
 on:
   push:
-  pull_request;
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    stategy:
+    strategy:
       matrix:
         java: [21, 25]
         experimental: [false, true]
