@@ -48,14 +48,11 @@ class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        // sehr einfache ID-Extraktion: wir prüfen nur, dass delete auf /1 oder /2 klappt?
-        // Besser: du liest die ID mit jsonPath – dafür bräuchten wir extra Parser.
-        // Pragmatiker-Variante: wir holen alle Tasks und nehmen die erste ID:
+
         mockMvc.perform(get("/api/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").isNumber());
 
-        // Wenn du Update/Delete schon hast: nimm id=1 (oder passe an deinen Zustand an).
         mockMvc.perform(delete("/api/tasks/1"))
                 .andExpect(status().isNoContent());
 
