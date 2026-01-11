@@ -1,9 +1,9 @@
-package de.zaeaep.taskhub.repository;
-
-import de.zaeaep.taskhub.model.Task;
+package de.zaeaep.taskhub.task.persistence;
 
 import java.util.List;
 import java.util.Optional;
+
+import de.zaeaep.taskhub.task.domain.Task;
 
 public interface TaskRepository {
     Task save(Task task);

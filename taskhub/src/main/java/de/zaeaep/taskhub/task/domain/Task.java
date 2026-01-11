@@ -1,4 +1,4 @@
-package de.zaeaep.taskhub.model;
+package de.zaeaep.taskhub.task.domain;
 
 import java.time.Instant;
 

@@ -1,4 +1,4 @@
-package de.zaeaep.taskhub.exception;
+package de.zaeaep.taskhub.common.error;
 
 import java.time.Instant;
 import java.util.List;

@@ -1,9 +1,13 @@
-package de.zaeaep.taskhub.service;
+package de.zaeaep.taskhub.task.api.mapper;
 
-import de.zaeaep.taskhub.dto.TaskResponse;
-import de.zaeaep.taskhub.model.Task;
+import de.zaeaep.taskhub.task.api.dto.TaskResponse;
+import de.zaeaep.taskhub.task.domain.Task;
 
-public class TaskMapper {
+public final class TaskMapper {
+
+    private TaskMapper() {
+    }
+
     public static TaskResponse toResponse(Task task) {
         return new TaskResponse(
             task.id(),

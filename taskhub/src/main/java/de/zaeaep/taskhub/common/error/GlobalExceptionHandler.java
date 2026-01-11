@@ -1,5 +1,6 @@
-package de.zaeaep.taskhub.exception;
+package de.zaeaep.taskhub.common.error;
 
+import de.zaeaep.taskhub.task.domain.TaskNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,11 +9,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 import java.time.Instant;
 import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleViolation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         List<ApiError.FieldViolation> violations = ex.getBindingResult().getFieldErrors().stream().map(err -> new ApiError.FieldViolation(err.getField(), err.getDefaultMessage())).toList();
@@ -57,6 +60,19 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
         
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleUnexpected(Exception ex, HttpServletRequest request) {
+        ApiError body = new ApiError(
+            Instant.now(),
+            500,
+            "Internal Server Error",
+            "Unexpected error",
+            request.getRequestURI(),
+            List.of()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
     
 }

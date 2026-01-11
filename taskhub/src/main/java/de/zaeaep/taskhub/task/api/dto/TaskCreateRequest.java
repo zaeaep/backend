@@ -1,4 +1,4 @@
-package de.zaeaep.taskhub.dto;
+package de.zaeaep.taskhub.task.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -1,7 +1,8 @@
-package de.zaeaep.taskhub.repository;
+package de.zaeaep.taskhub.task.persistence;
 
-import de.zaeaep.taskhub.model.Task;
 import org.springframework.stereotype.Repository;
+
+import de.zaeaep.taskhub.task.domain.Task;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
