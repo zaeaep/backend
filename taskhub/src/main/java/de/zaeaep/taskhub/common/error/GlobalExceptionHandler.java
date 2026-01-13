@@ -1,6 +1,7 @@
 package de.zaeaep.taskhub.common.error;
 
 import de.zaeaep.taskhub.task.domain.TaskNotFoundException;
+import de.zaeaep.taskhub.user.domain.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,5 +75,17 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
-    
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
+        ApiError body = new ApiError(
+            Instant.now(),
+            404,
+            "Not Found",
+            ex.getMessage(),
+            request.getRequestURI(),
+            List.of()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
 }
