@@ -3,6 +3,7 @@ package de.zaeaep.taskhub.common.error;
 import de.zaeaep.taskhub.task.domain.TaskNotFoundException;
 import de.zaeaep.taskhub.user.domain.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -87,5 +88,21 @@ public class GlobalExceptionHandler {
             List.of()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
+        var violations = ex.getConstraintViolations().stream().map(v -> new ApiError.FieldViolation(v.getPropertyPath().toString(), v.getMessage())).toList();
+
+        ApiError body = new ApiError(
+            Instant.now(),
+            400,
+            "Bad Request",
+            "Validation Vailed",
+            request.getRequestURI(),
+            violations
+        );
+
+        return ResponseEntity.badRequest().body(body);
     }
 }

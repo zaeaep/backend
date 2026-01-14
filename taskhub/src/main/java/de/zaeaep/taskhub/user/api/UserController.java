@@ -8,14 +8,18 @@ import de.zaeaep.taskhub.user.application.UserService;
 import de.zaeaep.taskhub.user.application.command.CreateUserCommand;
 import de.zaeaep.taskhub.user.application.command.UpdateUserCommand;
 
+
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -35,12 +39,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserResponse getById(@PathVariable long id) {
+    public UserResponse getById(@PathVariable @Positive(message = "id must be positiv") long id) {
         return UserMapper.toResponse(userService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public UserResponse update(@PathVariable long id, @Valid @RequestBody UpdateUserRequest request) {
+    public UserResponse update(@PathVariable @Positive(message = "id must be positiv") long id, @Valid @RequestBody UpdateUserRequest request) {
         return UserMapper.toResponse(
             userService.update(id, new UpdateUserCommand(request.name(), request.email()))
         );
@@ -48,7 +52,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable @Positive(message = "id must be positiv") long id) {
         userService.delete(id);
     }
 
