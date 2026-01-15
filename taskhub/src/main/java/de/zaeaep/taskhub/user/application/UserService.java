@@ -2,6 +2,7 @@ package de.zaeaep.taskhub.user.application;
 
 import de.zaeaep.taskhub.user.application.command.CreateUserCommand;
 import de.zaeaep.taskhub.user.application.command.UpdateUserCommand;
+import de.zaeaep.taskhub.user.domain.EmailAlreadyUsedException;
 import de.zaeaep.taskhub.user.domain.User;
 import de.zaeaep.taskhub.user.domain.UserNotFoundException;
 import de.zaeaep.taskhub.user.persistence.UserRepository;
@@ -23,6 +24,10 @@ public class UserService {
     }
 
     public User create(CreateUserCommand cmd) {
+        if (userRepository.existsByEmail(cmd.email())) {
+            throw new EmailAlreadyUsedException(cmd.email());
+        }
+
         long id = idGenerator.incrementAndGet();
         User user = new User(id, cmd.name(), cmd.email(), Instant.now());
         return userRepository.save(user);
@@ -37,6 +42,9 @@ public class UserService {
     }
 
     public User update(long id, UpdateUserCommand cmd) {
+        if (userRepository.existsByEmail(cmd.email())) {
+            throw new EmailAlreadyUsedException(cmd.email());
+        }
         User existing = findById(id);
         String newName = cmd.name() != null ? cmd.name() : existing.name();
         String newEmail = cmd.email() != null ? cmd.email() : existing.email();

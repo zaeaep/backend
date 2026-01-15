@@ -1,7 +1,9 @@
 package de.zaeaep.taskhub.user.domain;
 
-public class UserNotFoundException extends RuntimeException {
+import de.zaeaep.taskhub.common.error.ApiException;
+
+public class UserNotFoundException extends ApiException {
     public UserNotFoundException(long id) {
-        super("User with id " + id + " not found");
+        super("USER_NOT_FOUND", "User with id " + id + " not found");
     }
 }
