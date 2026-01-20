@@ -13,6 +13,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 
 @RestController
@@ -24,13 +26,18 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TaskResponse create(@Valid @RequestBody TaskCreateRequest request) {
+    // @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<TaskResponse> create(@Valid @RequestBody TaskCreateRequest request) {
         Task created = taskService.create(new CreateTaskCommand(
             request.title(),
             request.description()
         ));
-        return TaskMapper.toResponse(created);
+        TaskResponse response = TaskMapper.toResponse(created);
+
+        var location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(created.id()).toUri();
+
+
+        return ResponseEntity.created(location).body(response);
     }
     
     @GetMapping
@@ -39,20 +46,20 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public TaskResponse getById(@PathVariable @Positive(message = "id must be positiv") long id) {
-        return TaskMapper.toResponse(taskService.findById(id));
+    public ResponseEntity<TaskResponse> getById(@PathVariable @Positive(message = "id must be positiv") long id) {
+        return ResponseEntity.ok(TaskMapper.toResponse(taskService.findById(id)));
     }
 
     @PutMapping("/{id}")
-    public TaskResponse update(@PathVariable @Positive(message = "id must be positiv") long id, @Valid @RequestBody TaskUpdateRequest request) {
+    public ResponseEntity<TaskResponse> update(@PathVariable @Positive(message = "id must be positiv") long id, @Valid @RequestBody TaskUpdateRequest request) {
         Task updated = taskService.update(id, new UpdateTaskCommand(request.title(), request.description(), request.done()));
-        return TaskMapper.toResponse(updated);
+        return ResponseEntity.ok(TaskMapper.toResponse(updated));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Positive(message = "id must be positiv") long id) {
+    public ResponseEntity<Void> delete(@PathVariable @Positive(message = "id must be positiv") long id) {
         taskService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

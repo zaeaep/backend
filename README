@@ -5,9 +5,13 @@
 ./mvnw clean test
 
 ## API
-GET  /api/hello
-POST /api/tasks
-GET  /api/tasks
-GET  /api/tasks/{id}
-PUT  /api/tasks/{id}
-DELETE /api/tasks/{id}
+GET=200  /api/hello
+POST=201 /api/tasks
+GET=200 /api/tasks
+GET=200 /api/tasks/{id}
+PUT=200 /api/tasks/{id}
+DELETE=204 /api/tasks/{id}
+Fehler=400
+NotFount=404
+Conflict=409
+Unexpected=500
